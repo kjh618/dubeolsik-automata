@@ -18,11 +18,11 @@ class CurrentCharacter:
         'ㅡ': {'ㅣ': 'ㅢ'}
     }
 
-    def __init__(self):
-        self.choseong = None
-        self.jungseong = None
-        self.jongseong1 = None
-        self.jongseong2 = None
+    def __init__(self, choseong=None, jungseong=None, jongseong1=None, jongseong2=None):
+        self.choseong = choseong
+        self.jungseong = jungseong
+        self.jongseong1 = jongseong1
+        self.jongseong2 = jongseong2
 
     def add_choseong(self, jaeum):
         assert jaeum in KEY_JAEUM
@@ -84,7 +84,7 @@ class CurrentCharacter:
                       (ord(self.jungseong) - 0x314F) * 28 + jong1 + jong2
         else:
             print("CurrentCharacter - join function error")
-        return kor_one
+        return chr(kor_one)
 
 def join_jamos(jamos):
     cur_state = State.START
