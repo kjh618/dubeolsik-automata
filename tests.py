@@ -12,5 +12,5 @@ assert_eq(join_jamos('ㄱㅣㅅㅁㅏㅅㅡㅌㅓ'), '깃마스터')
 
 assert_eq(change_input_eng_kor('dkssudgktpdy'),'ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ')
 
-character1 = CurrentCharacter('ㄱ','ㅘ','ㄹ','ㅎ')
-assert_eq(character1.join(),'괋')
+character1 = CurrentCharacter('ㅇ','ㅏ','ㄴ')
+assert_eq(character1.join(),'안')

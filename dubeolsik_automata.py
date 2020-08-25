@@ -73,12 +73,14 @@ class CurrentCharacter:
         rieul_list = ['','ㄱ','ㅁ','ㅂ','ㅅ','ㅌ','ㅍ','ㅎ']
         bieup_list = ['','ㅅ']
         siot_list = ['','ㅅ']
+
+        choseong_list = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
         if self.jongseong1 == None and self.jongseong2 == None:
-            kor_one = 0xAC00 + (ord(self.choseong) - 0x3131) * 588 + \
+            kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + 0
         elif (self.jongseong1 != None) and self.jongseong2 == None:
             jong1 = jongseong_list.index(self.jongseong1) + 1
-            kor_one = 0xAC00 + (ord(self.choseong) - 0x3131) * 588 + \
+            kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + jong1
         elif (self.jongseong1 != None) and (self.jongseong2 != None):
             jong1 = jongseong_list.index(self.jongseong1) + 1
@@ -94,7 +96,7 @@ class CurrentCharacter:
                 jong2 = siot_list.index(self.jongseong2)
             else:
                 print("no such jongseong")
-            kor_one = 0xAC00 + (ord(self.choseong) - 0x3131) * 588 + \
+            kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + jong1 + jong2
         else:
             print("CurrentCharacter - join function error")
@@ -119,7 +121,7 @@ def join_jamos(jamos):
 
         elif cur_state == State.CHOSEONG:
             if jamo in KEY_JAEUM:
-                result += cur_char.join_debug()
+                result += cur_char.join()
                 cur_char = CurrentCharacter(jamo)
                 cur_state = State.CHOSEONG
             elif jamo in KEY_MOEUM:
@@ -129,7 +131,7 @@ def join_jamos(jamos):
         elif cur_state == State.JUNGSEONG1:
             if jamo in KEY_JAEUM:
                 if cur_char.choseong == None or jamo not in JONGSEONG:
-                    result += cur_char.join_debug()
+                    result += cur_char.join()
                     cur_char = CurrentCharacter(jamo)
                     cur_state = State.CHOSEONG
                 else:
@@ -140,21 +142,21 @@ def join_jamos(jamos):
                     cur_char.add_jungseong(jamo)
                     cur_state = State.JUNGSEONG2
                 else:
-                    result += cur_char.join_debug()
+                    result += cur_char.join()
                     cur_char = CurrentCharacter(None, jamo)
                     cur_state = State.JUNGSEONG1
         
         elif cur_state == State.JUNGSEONG2:
             if jamo in KEY_JAEUM:
                 if cur_char.choseong == None or jamo not in JONGSEONG:
-                    result += cur_char.join_debug()
+                    result += cur_char.join()
                     cur_char = CurrentCharacter(jamo)
                     cur_state = State.CHOSEONG
                 else:
                     cur_char.add_jongseong(jamo)
                     cur_state = State.JONGSEONG1
             elif jamo in KEY_MOEUM:
-                result += cur_char.join_debug()
+                result += cur_char.join()
                 cur_char = CurrentCharacter(None, jamo)
                 cur_state = State.JUNGSEONG1
         
@@ -164,32 +166,32 @@ def join_jamos(jamos):
                     cur_char.add_jongseong(jamo)
                     cur_state = State.JONGSEONG2
                 else:
-                    result += cur_char.join_debug()
+                    result += cur_char.join()
                     cur_char = CurrentCharacter(jamo)
                     cur_state = State.CHOSEONG
             if jamo in KEY_MOEUM:
                 new_choseong = cur_char.jongseong1
                 cur_char.jongseong1 = None
-                result += cur_char.join_debug()
+                result += cur_char.join()
                 cur_char = CurrentCharacter(new_choseong, jamo)
                 cur_state = State.JUNGSEONG1
         
         elif cur_state == State.JONGSEONG2:
             if jamo in KEY_JAEUM:
-                result += cur_char.join_debug()
+                result += cur_char.join()
                 cur_char = CurrentCharacter(jamo)
                 cur_state = State.CHOSEONG
             elif jamo in KEY_MOEUM:
                 new_choseong = cur_char.jongseong2
                 cur_char.jongseong2 = None
-                result += cur_char.join_debug()
+                result += cur_char.join()
                 cur_char = CurrentCharacter(new_choseong, jamo)
                 cur_state = State.JUNGSEONG1
         
         else:
             assert False
     
-    result += cur_char.join_debug()
+    result += cur_char.join()
 
     return result
 
