@@ -3,6 +3,8 @@ from enum import Enum
 KEY_JAEUM = set('ㅂㅃㅈㅉㄷㄸㄱㄲㅅㅆㅁㄴㅇㄹㅎㅋㅌㅊㅍ')
 KEY_MOEUM = set('ㅛㅕㅑㅐㅒㅔㅖㅗㅓㅏㅣㅠㅜㅡ')
 
+JONGSEONG = set('ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ')
+
 class State(Enum):
     START = 0
     CHOSEONG = 1
@@ -13,16 +15,22 @@ class State(Enum):
 
 class CurrentCharacter:
     COMBINE_JUNGSEONG = {
-        'ㅗ': {'ㅏ': 'ㅘ', 'ㅐ': 'ㅙ', 'ㅣ': 'ㅚ'},
-        'ㅜ': {'ㅓ': 'ㅝ', 'ㅔ': 'ㅞ', 'ㅣ': 'ㅟ'},
-        'ㅡ': {'ㅣ': 'ㅢ'}
+        'ㅗ': { 'ㅏ': 'ㅘ', 'ㅐ': 'ㅙ', 'ㅣ': 'ㅚ' },
+        'ㅜ': { 'ㅓ': 'ㅝ', 'ㅔ': 'ㅞ', 'ㅣ': 'ㅟ' },
+        'ㅡ': { 'ㅣ': 'ㅢ' }
+    }
+    COMBINE_JONGSEONG = {
+        'ㄱ': { 'ㅅ': 'ㄳ' },
+        'ㄴ': { 'ㅈ': 'ㄵ', 'ㅎ': 'ㄶ' },
+        'ㄹ': { 'ㄱ': 'ㄺ', 'ㅁ': 'ㄻ', 'ㅂ': 'ㄼ', 'ㅅ': 'ㄽ', 'ㅌ': 'ㄾ', 'ㅍ': 'ㄿ', 'ㅎ': 'ㅀ' },
+        'ㅂ': { 'ㅅ': 'ㅄ' }
     }
 
-    def __init__(self):
-        self.choseong = None
-        self.jungseong = None
-        self.jongseong1 = None
-        self.jongseong2 = None
+    def __init__(self, choseong=None, jungseong=None, jongseong1=None, jongseong2=None):
+        self.choseong = choseong
+        self.jungseong = jungseong
+        self.jongseong1 = jongseong1
+        self.jongseong2 = jongseong2
 
     def add_choseong(self, jaeum):
         assert jaeum in KEY_JAEUM
@@ -42,12 +50,18 @@ class CurrentCharacter:
         else:
             assert False
     
-    def add_jongseong(self, jaeum):
-        # TODO: combine jongseong
-        self.jongseong1 = jaeum
+    def can_combine_jongseong(self, jaeum):
+        return self.jongseong1 in CurrentCharacter.COMBINE_JONGSEONG \
+            and jaeum in CurrentCharacter.COMBINE_JONGSEONG[self.jongseong1]
 
-    def join_temp(self):
-        return (self.choseong, self.jungseong, self.jongseong1, self.jongseong2)
+    def add_jongseong(self, jaeum):
+        assert jaeum in KEY_JAEUM
+        if self.jongseong1 == None:
+            self.jongseong1 = jaeum
+        elif self.can_combine_jongseong(jaeum):
+            self.jongseong2 = jaeum
+        else:
+            assert False
 
     def join(self):
         kor_one = 0
@@ -102,15 +116,75 @@ def join_jamos(jamos):
 
         elif cur_state == State.CHOSEONG:
             if jamo in KEY_JAEUM:
-                result += cur_char.join_temp()
-                cur_char = CurrentCharacter()
-                cur_char.add_choseong(jamo)
+                result += cur_char.join()
+                cur_char = CurrentCharacter(jamo)
                 cur_state = State.CHOSEONG
             elif jamo in KEY_MOEUM:
                 cur_char.add_jungseong(jamo)
                 cur_state = State.JUNGSEONG1
 
-        # TODO: other states
+        elif cur_state == State.JUNGSEONG1:
+            if jamo in KEY_JAEUM:
+                if cur_char.choseong == None or jamo not in JONGSEONG:
+                    result += cur_char.join()
+                    cur_char = CurrentCharacter(jamo)
+                    cur_state = State.CHOSEONG
+                else:
+                    cur_char.add_jongseong(jamo)
+                    cur_state = State.JONGSEONG1
+            elif jamo in KEY_MOEUM:
+                if cur_char.can_combine_jungseong(jamo):
+                    cur_char.add_jungseong(jamo)
+                    cur_state = State.JUNGSEONG2
+                else:
+                    result += cur_char.join()
+                    cur_char = CurrentCharacter(None, jamo)
+                    cur_state = State.JUNGSEONG1
+        
+        elif cur_state == State.JUNGSEONG2:
+            if jamo in KEY_JAEUM:
+                if cur_char.choseong == None or jamo not in JONGSEONG:
+                    result += cur_char.join()
+                    cur_char = CurrentCharacter(jamo)
+                    cur_state = State.CHOSEONG
+                else:
+                    cur_char.add_jongseong(jamo)
+                    cur_state = State.JONGSEONG1
+            elif jamo in KEY_MOEUM:
+                result += cur_char.join()
+                cur_char = CurrentCharacter(None, jamo)
+                cur_state = State.JUNGSEONG1
+        
+        elif cur_state == State.JONGSEONG1:
+            if jamo in KEY_JAEUM:
+                if cur_char.can_combine_jongseong(jamo):
+                    cur_char.add_jongseong(jamo)
+                    cur_state = State.JONGSEONG2
+                else:
+                    result += cur_char.join()
+                    cur_char = CurrentCharacter(jamo)
+                    cur_state = State.CHOSEONG
+            if jamo in KEY_MOEUM:
+                new_choseong = cur_char.jongseong1
+                cur_char.jongseong1 = None
+                result += cur_char.join()
+                cur_char = CurrentCharacter(new_choseong)
+                cur_state = State.JUNGSEONG1
+        
+        elif cur_state == State.JONGSEONG2:
+            if jamo in KEY_JAEUM:
+                result += cur_char.join()
+                cur_char = CurrentCharacter(jamo)
+                cur_state = State.CHOSEONG
+            elif jamo in KEY_MOEUM:
+                new_choseong = cur_char.jongseong2
+                cur_char.jongseong2 = None
+                result += cur_char.join()
+                cur_char = CurrentCharacter(new_choseong)
+                cur_state = State.JUNGSEONG1
+        
+        else:
+            assert False
 
     return result
 
