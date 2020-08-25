@@ -75,7 +75,11 @@ class CurrentCharacter:
         siot_list = ['','ㅅ']
 
         choseong_list = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
-        if self.jongseong1 == None and self.jongseong2 == None:
+        if self.choseong == None:
+            return self.jungseong
+        elif self.choseong != None and self. jungseong == None and self.jongseong1 == None and self.jongseong2 == None:
+            return self.choseong
+        elif self.jongseong1 == None and self.jongseong2 == None:
             kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + 0
         elif (self.jongseong1 != None) and self.jongseong2 == None:
