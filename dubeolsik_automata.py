@@ -19,7 +19,41 @@ class CurrentCharacter:
         self.jongseong2 = None
 
     def join(self):
-        return '각'
+        kor_one = 0
+        jongseong_list = ['ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ',
+                          'ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ',
+                          'ㅎ']
+        giyuk_list = ['','ㄱ','ㅅ']
+        nieun_list = ['','ㅈ','ㅎ']
+        rieul_list = ['','ㄱ','ㅁ','ㅂ','ㅅ','ㅌ','ㅍ','ㅎ']
+        bieup_list = ['','ㅅ']
+        siot_list = ['','ㅅ']
+        if self.jongseong1 == None and self.jongseong2 == None:
+            kor_one = 0xAC00 + (ord(self.choseong) - 0x3131) * 588 + \
+                      (ord(self.jungseong) - 0x314F) * 28 + 0
+        elif (self.jongseong1 != None) and self.jongseong2 == None:
+            jong1 = jongseong_list.index(self.jongseong1) + 1
+            kor_one = 0xAC00 + (ord(self.choseong) - 0x3131) * 588 + \
+                      (ord(self.jungseong) - 0x314F) * 28 + jong1
+        elif (self.jongseong1 != None) and (self.jongseong2 != None):
+            jong1 = jongseong_list.index(self.jongseong1) + 1
+            if self.jongseong1 == 'ㄱ':
+                jong2 = giyuk_list.index(self.jongseong2)
+            elif self.jongseong1 == 'ㄴ':
+                jong2 = nieun_list.index(self.jongseong2)
+            elif self.jongseong1 == 'ㄹ':
+                jong2 = rieul_list.index(self.jongseong2)
+            elif self.jongseong1 == 'ㅂ':
+                jong2 = bieup_list.index(self.jongseong2)
+            elif self.jongseong1 == 'ㅅ':
+                jong2 = siot_list.index(self.jongseong2)
+            else:
+                print("no such jongseong")
+            kor_one = 0xAC00 + (ord(self.choseong) - 0x3131) * 588 + \
+                      (ord(self.jungseong) - 0x314F) * 28 + jong1 + jong2
+        else:
+            print("CurrentCharacter - join function error")
+    return kor_one
 
 def join_jamos(jamos):
     cur_state = State.START
