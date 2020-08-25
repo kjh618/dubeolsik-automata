@@ -98,7 +98,7 @@ class CurrentCharacter:
                       (ord(self.jungseong) - 0x314F) * 28 + jong1 + jong2
         else:
             print("CurrentCharacter - join function error")
-        return kor_one
+        return chr(kor_one)
 
 def join_jamos(jamos):
     cur_state = State.START
