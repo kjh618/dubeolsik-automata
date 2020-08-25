@@ -8,3 +8,4 @@ from dubeolsik_automata import join_jamos
 
 assert_eq(join_jamos('ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ'), '안녕하세요')
 assert_eq(join_jamos('ㅌㅔㅅㅡㅌㅡ'), '테스트')
+assert_eq(join_jamos('ㄱㅣㅅㅁㅏㅅㅡㅌㅓ'), '깃마스터')
