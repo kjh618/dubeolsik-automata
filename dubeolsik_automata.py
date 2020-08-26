@@ -65,6 +65,7 @@ class CurrentCharacter:
 
     def join(self):
         kor_one = 0
+        choseong_list = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
         jongseong_list = ['ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ',
                           'ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ',
                           'ㅎ']
@@ -74,7 +75,6 @@ class CurrentCharacter:
         bieup_list = ['','ㅅ']
         siot_list = ['','ㅅ']
 
-        choseong_list = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
         if self.choseong == None:
             return self.jungseong
         elif self.choseong != None and self. jungseong == None and self.jongseong1 == None and self.jongseong2 == None:
@@ -99,11 +99,11 @@ class CurrentCharacter:
             elif self.jongseong1 == 'ㅅ':
                 jong2 = siot_list.index(self.jongseong2)
             else:
-                print("no such jongseong")
+                print("No Such Jongseong")
             kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + jong1 + jong2
         else:
-            print("CurrentCharacter - join function error")
+            print("Error: CurrentCharacter -> Join Function")
         return chr(kor_one)
 
     def join_debug(self):
