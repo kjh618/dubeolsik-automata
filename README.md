@@ -17,4 +17,4 @@
 - join_jamos
 
 ## Shield
-https://img.shields.io/github/languages/code-size/beygee/survive
+![GitHub repo size](https://img.shields.io/github/repo-size/kjh618/dubeolsik-automata)
