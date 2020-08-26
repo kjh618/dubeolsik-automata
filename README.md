@@ -7,7 +7,7 @@ A simple Dubeolsik Hangul input automata implemented in Python
 
 ## 예시 (Examples)
 ```python
->>> from dubeolsik_automata import join_jamos, qwerty_to_dubeolsik
+>>> from dubeolsik_automata import qwerty_to_dubeolsik, join_jamos
 >>> qwerty_to_dubeolsik('dkssud')
 'ㅇㅏㄴㄴㅕㅇ'
 >>> join_jamos('ㅇㅏㄴㄴㅕㅇ')
