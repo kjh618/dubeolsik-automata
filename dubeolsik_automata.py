@@ -3,7 +3,8 @@ from enum import Enum
 KEY_JAEUM = set('ㅂㅃㅈㅉㄷㄸㄱㄲㅅㅆㅁㄴㅇㄹㅎㅋㅌㅊㅍ')
 KEY_MOEUM = set('ㅛㅕㅑㅐㅒㅔㅖㅗㅓㅏㅣㅠㅜㅡ')
 
-JONGSEONG = set('ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ')
+CHOSEONG_LIST = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
+JONGSEONG_LIST = 'ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ'
 
 class State(Enum):
     START = 0
@@ -65,10 +66,6 @@ class CurrentCharacter:
 
     def join(self):
         kor_one = 0
-        choseong_list = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
-        jongseong_list = ['ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ',
-                          'ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ',
-                          'ㅎ']
         giyuk_list = ['','ㄱ','ㅅ']
         nieun_list = ['','ㅈ','ㅎ']
         rieul_list = ['','ㄱ','ㅁ','ㅂ','ㅅ','ㅌ','ㅍ','ㅎ']
@@ -80,14 +77,14 @@ class CurrentCharacter:
         elif self.choseong != None and self. jungseong == None and self.jongseong1 == None and self.jongseong2 == None:
             return self.choseong
         elif self.choseong != None and self. jungseong != None and self.jongseong1 == None and self.jongseong2 == None:
-            kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
+            kor_one = 0xAC00 + CHOSEONG_LIST.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + 0
         elif self.choseong != None and self. jungseong != None and self.jongseong1 != None and self.jongseong2 == None:
-            jong1 = jongseong_list.index(self.jongseong1) + 1
-            kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
+            jong1 = JONGSEONG_LIST.index(self.jongseong1) + 1
+            kor_one = 0xAC00 + CHOSEONG_LIST.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + jong1
         elif self.choseong != None and self. jungseong != None and self.jongseong1 != None and self.jongseong2 != None:
-            jong1 = jongseong_list.index(self.jongseong1) + 1
+            jong1 = JONGSEONG_LIST.index(self.jongseong1) + 1
             if self.jongseong1 == 'ㄱ':
                 jong2 = giyuk_list.index(self.jongseong2)
             elif self.jongseong1 == 'ㄴ':
@@ -99,15 +96,12 @@ class CurrentCharacter:
             elif self.jongseong1 == 'ㅅ':
                 jong2 = siot_list.index(self.jongseong2)
             else:
-                print("No Such Jongseong")
-            kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
+                assert False
+            kor_one = 0xAC00 + CHOSEONG_LIST.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + jong1 + jong2
         else:
-            print("empty input")
+            return ''
         return chr(kor_one)
-
-    def join_debug(self):
-        return str((self.choseong, self.jungseong, self.jongseong1, self.jongseong2))
 
 def join_jamos(keys):
     cur_state = State.START
@@ -140,7 +134,7 @@ def join_jamos(keys):
 
         elif cur_state == State.JUNGSEONG1:
             if key in KEY_JAEUM:
-                if cur_char.choseong == None or key not in JONGSEONG:
+                if cur_char.choseong == None or key not in JONGSEONG_LIST:
                     result += cur_char.join()
                     cur_char = CurrentCharacter(key)
                     cur_state = State.CHOSEONG
@@ -158,7 +152,7 @@ def join_jamos(keys):
         
         elif cur_state == State.JUNGSEONG2:
             if key in KEY_JAEUM:
-                if cur_char.choseong == None or key not in JONGSEONG:
+                if cur_char.choseong == None or key not in JONGSEONG_LIST:
                     result += cur_char.join()
                     cur_char = CurrentCharacter(key)
                     cur_state = State.CHOSEONG
