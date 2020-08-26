@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='dubeolsik-automata',
-    version='0.1.1',
+    version='0.2.0',
     author='Jihoon Kim, Seongyeop Yi',
     author_email='kimjihoon6188@daum.net',
     description='Dubeolsik automata',

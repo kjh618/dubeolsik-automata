@@ -4,13 +4,13 @@ def assert_eq(left, right):
     else:
         assert False, 'FAIL: {} != {}'.format(left, right)
         
-from dubeolsik_automata import qwerty_to_dubeolsik, join_jamos, CurrentCharacter
+from dubeolsik_automata import qwerty_to_dubeolsik, join_jamos, HangulCharacter
 
 print('[qwerty_to_dubeolsik]')
 assert_eq(qwerty_to_dubeolsik('dkssudgktpdy'), 'ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ')
 
-print('\n[CurrentCharacter]')
-assert_eq(CurrentCharacter('ㅇ','ㅏ','ㄴ').join(), '안')
+print('\n[HangulCharacter]')
+assert_eq(HangulCharacter('ㅇ','ㅏ','ㄴ').join(), '안')
 
 print('\n[join_jamos]')
 print(' [Simple Test]')
