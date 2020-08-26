@@ -1,9 +1,9 @@
 # 두벌식 오토마타 (Dubeolsik Automata)
 ![GitHub repo size](https://img.shields.io/github/repo-size/kjh618/dubeolsik-automata)
 
-간단한 두벌식 한글 입력 오토마타
+파이썬으로 구현된 간단한 두벌식 한글 입력 오토마타
 
-A simple Dubeolsik Hangul input automata
+A simple Dubeolsik Hangul input automata implemented in Python
 
 ## 예시 (Examples)
 ```python
