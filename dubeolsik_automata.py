@@ -75,18 +75,18 @@ class CurrentCharacter:
         bieup_list = ['','ㅅ']
         siot_list = ['','ㅅ']
 
-        if self.choseong == None:
+        if self.choseong == None and self.jungseong != None and self.jongseong1 == None and self.jongseong2 == None:
             return self.jungseong
         elif self.choseong != None and self. jungseong == None and self.jongseong1 == None and self.jongseong2 == None:
             return self.choseong
-        elif self.jongseong1 == None and self.jongseong2 == None:
+        elif self.choseong != None and self. jungseong != None and self.jongseong1 == None and self.jongseong2 == None:
             kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + 0
-        elif (self.jongseong1 != None) and self.jongseong2 == None:
+        elif self.choseong != None and self. jungseong != None and self.jongseong1 != None and self.jongseong2 == None:
             jong1 = jongseong_list.index(self.jongseong1) + 1
             kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + jong1
-        elif (self.jongseong1 != None) and (self.jongseong2 != None):
+        elif self.choseong != None and self. jungseong != None and self.jongseong1 != None and self.jongseong2 != None:
             jong1 = jongseong_list.index(self.jongseong1) + 1
             if self.jongseong1 == 'ㄱ':
                 jong2 = giyuk_list.index(self.jongseong2)
@@ -103,7 +103,7 @@ class CurrentCharacter:
             kor_one = 0xAC00 + choseong_list.index(self.choseong) * 588 + \
                       (ord(self.jungseong) - 0x314F) * 28 + jong1 + jong2
         else:
-            print("Error: CurrentCharacter -> Join Function")
+            print("empty input")
         return chr(kor_one)
 
     def join_debug(self):
