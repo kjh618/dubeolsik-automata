@@ -16,8 +16,5 @@
 ### 함수 설명 (Functions)
 - join_jamos
 
-
-## 라이센스 (License)
-- 
-
 ## Shield
+https://img.shields.io/github/languages/code-size/beygee/survive
