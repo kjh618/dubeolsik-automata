@@ -16,8 +16,5 @@
 ### 함수 설명 (Functions)
 - join_jamos
 
-
-## 라이센스 (License)
-- 
-
 ## Shield
+![GitHub repo size](https://img.shields.io/github/repo-size/kjh618/dubeolsik-automata)
