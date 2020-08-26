@@ -6,6 +6,20 @@ KEY_MOEUM = set('ㅛㅕㅑㅐㅒㅔㅖㅗㅓㅏㅣㅠㅜㅡ')
 CHOSEONG_LIST = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'
 JONGSEONG_LIST = 'ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ'
 
+#qwerty looks like : "dkssudgktpdy" -> dubeolsik : "ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ"
+def qwerty_to_dubeolsik(qwerty):
+    dubeolsik = ""
+    qwerty_dubeolsik = {'q':'ㅂ','w':'ㅈ','e':'ㄷ','r':'ㄱ','t':'ㅅ','y':'ㅛ','u':'ㅕ',
+           'i':'ㅑ','o':'ㅐ','p':'ㅔ','a':'ㅁ','s':'ㄴ','d':'ㅇ','f':'ㄹ',
+           'g':'ㅎ','h':'ㅗ','j':'ㅓ','k':'ㅏ','l':'ㅣ','z':'ㅋ','x':'ㅌ',
+           'c':'ㅊ','v':'ㅍ','b':'ㅠ','n':'ㅜ','m':'ㅡ', 'Q':'ㅃ', 'W':'ㅉ',
+           'E':'ㄸ', 'R':'ㄲ', 'T':'ㅆ', 'O':'ㅒ', 'P':'ㅖ'}
+
+    for i in range(len(qwerty)):
+        dubeolsik += qwerty_dubeolsik[qwerty[i]]
+
+    return dubeolsik
+
 class State(Enum):
     START = 0
     CHOSEONG = 1
@@ -198,17 +212,3 @@ def join_jamos(keys):
     result += cur_char.join()
 
     return result
-
-#engs looks like : "dkssudgktpdy" -> kors : "ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ"
-def change_input_eng_kor(engs):
-    kors = ""
-    eng_kor = {'q':u'ㅂ','w':u'ㅈ','e':u'ㄷ','r':u'ㄱ','t':u'ㅅ','y':u'ㅛ','u':u'ㅕ',
-           'i':u'ㅑ','o':u'ㅐ','p':u'ㅔ','a':u'ㅁ','s':u'ㄴ','d':u'ㅇ','f':u'ㄹ',
-           'g':u'ㅎ','h':u'ㅗ','j':u'ㅓ','k':u'ㅏ','l':u'ㅣ','z':u'ㅋ','x':u'ㅌ',
-           'c':u'ㅊ','v':u'ㅍ','b':u'ㅠ','n':u'ㅜ','m':u'ㅡ', 'Q':u'ㅃ', 'W':u'ㅉ',
-           'E':u'ㄸ', 'R':u'ㄲ', 'T':u'ㅆ', 'O':u'ㅒ', 'P':u'ㅖ'}
-
-    for i in range(len(engs)):
-        kors += eng_kor[engs[i]]
-
-    return kors
