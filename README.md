@@ -9,9 +9,9 @@ A simple Dubeolsik Hangul input automata implemented in Python
 ```python
 >>> from dubeolsik_automata import qwerty_to_dubeolsik, join_jamos
 >>> qwerty_to_dubeolsik('dkssud')
-'ㅇㅏㄴㄴㅕㅇ'
->>> join_jamos('ㅇㅏㄴㄴㅕㅇ')
 '안녕'
+>>> join_jamos('ㄷㅏㄹㅏㅁㅈㅜㅣ ㅎㅓㄴ ㅊㅔㅅㅂㅏㅋㅜㅣㅇㅔ ㅌㅏㄱㅗㅍㅏ.')
+'다람쥐 헌 쳇바퀴에 타고파'
 ```
 
 ## 설치 (Install)
